@@ -3,12 +3,13 @@ An architecture tool based on the anstract/instability graph expressed in "Clean
 
 ## Status
 
-~Legend~
+Legend
 👨‍💻 = In Progress
+
 🚢 = Shipped and available
+
 🧠 = No work started yet
 
-### 👨‍💻 Version 0.1
-#### Features
+### Version 0.1 👨‍💻 
 - Prints component abstract analysis to console
 - Prints component stability analysis to console
