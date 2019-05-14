@@ -3,13 +3,11 @@ An architecture tool based on the anstract/instability graph expressed in "Clean
 
 ## Legend
 
-Legend
-
-👨‍💻 = In Progress
+🧠 = No work started yet
 
 🚢 = Shipped and available
 
-🧠 = No work started yet
+👨‍💻 = In Progress 
 
 ## Status
 
