@@ -4,6 +4,7 @@ An architecture tool based on the anstract/instability graph expressed in "Clean
 ## Status
 
 Legend
+
 👨‍💻 = In Progress
 
 🚢 = Shipped and available
