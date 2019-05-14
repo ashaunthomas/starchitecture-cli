@@ -5,9 +5,9 @@ An architecture tool based on the anstract/instability graph expressed in "Clean
 
 🧠 = No work started yet
 
-🚢 = Shipped and available
-
 👨‍💻 = In Progress 
+
+🚢 = Shipped and available
 
 ## Status
 
