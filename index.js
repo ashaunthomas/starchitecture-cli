@@ -3,7 +3,10 @@ const ROOT = process.argv[2];
 const PATHGRABBER = './pathgrabber.js ';
 const fs = require('fs');
 const path = require('path');
-
+const angular = {
+    tsFile: /component.ts/,
+} 
+const windowsPath = /[A-z0-9:\\-]*/;
 /*
     Stores components and associated information in the
     following schema:
@@ -35,11 +38,16 @@ var pathGrabber = function(dir, done) {
                     });
                 } 
                 else {
-                    results.push(file);
-                    if (!--pending) { 
-                        done(null, results);
+                    // if file matches component structure
+                    fileEnd = file.replace(windowsPath, '');
+                    if (fileEnd.match(angular.tsFile)) {
+                        results.push(file);
+                        if (!--pending) { 
+                            done(null, results);
+                        }
                     }
                 }
+                console.log(results);
             });
         });
     });
