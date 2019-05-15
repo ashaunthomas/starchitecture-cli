@@ -47,7 +47,12 @@ var walk = function(ROOT, done) {
 
 walk(ROOT, function(err, results) {
     if (err) throw err;
-    console.log(results);
+    //console.log(results);
+    for (let i = 0; i < results.length; i++) {
+        fs.readFile(results[i], 'utf-8', (err, data) => {
+            
+        });  
+    }
 });
 
 
