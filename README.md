@@ -18,5 +18,6 @@ A = Number of classes in the component / Number of abstract classes and interfac
 ## Status
 
 ### Version 0.1 👨‍💻 
+- Angular project coverage
 - Prints component abstract analysis to console
 - Prints component stability analysis to console
