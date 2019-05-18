@@ -13,7 +13,11 @@ interface what {
     }
 }
 
+abstract class baseClass {
 
-export class TestComponent {
+}
+
+
+export class TestComponent extends baseClass {
 
 }
