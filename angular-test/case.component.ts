@@ -1,3 +1,5 @@
+import { CoolClass, HotClass } from './thegame.component';
+
 interface lol {
     here: 'is a test',
     what: 'is\nGoingOn'

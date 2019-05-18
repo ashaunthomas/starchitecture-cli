@@ -7,19 +7,12 @@ const angular = {
     tsFile: /component.ts/,
     interface: 'interface',
     abstraction: 'abstract',
-    class: 'class'
+    class: 'class',
+    import:'import'
 } 
 const windowsPath = /[A-z0-9:\\-]*/;
-var paths = [];
-/*
-    Stores components and associated information in the
-    following schema:
-        Component_Name : {
-            Instability_Value: Some_Number, 
-            Abstraction_Value: Some_Number
-        }
-*/ 
-let components = {};
+
+let fanIn, fanOut = {};
 
 var walk = function(ROOT, done) {
   var results = [];
@@ -70,20 +63,36 @@ function getTotalClasses(data) {
   return count;
 }
 
+function calcFanOut(componentName, data) {
+  let wordsArr = data
+    .replace(/\n/g, " ")
+    .replace(/\r/g, " ")
+    .split(" ");
+  let count = 0;
+  for(let i = 0; i < wordsArr.length; i++) {
+    if (wordsArr[i] === 'import') {
+      let searchIndex = i + 2;
+      while (wordsArr[searchIndex] !== '}') {
+        ++searchIndex;
+        ++count;
+      }
+    }
+  }
+  fanOut[componentName] = count;
+}
+
 walk(ROOT, function(err, results) {
     if (err) throw err;
-    //console.log(results);
     for (let i = 0; i < results.length; i++) {
         fs.readFile(results[i], 'utf-8', (err, data) => {
-            // console.group(results[i])
-            // console.log(data);
-            // console.groupEnd();
             let abstractions = getAbstractions(data);
             let totalClasses = getTotalClasses(data);
+            calcFanOut(results[i], data);
             console.group(results[i]);
             console.log('abstractions: ' + abstractions);
             console.log('total: ' + totalClasses);
             console.log('abstractness: ' + abstractions/totalClasses);
+            console.log('Fan-Out: ' + fanOut[results[i]]);
             console.groupEnd();
         });  
     }
