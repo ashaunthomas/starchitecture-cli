@@ -6,7 +6,8 @@ const path = require('path');
 const angular = {
     tsFile: /component.ts/,
     interface: 'interface',
-    abstraction: 'abstract'
+    abstraction: 'abstract',
+    class: 'class'
 } 
 const windowsPath = /[A-z0-9:\\-]*/;
 var paths = [];
@@ -58,6 +59,17 @@ function getAbstractions(data) {
   return count;
 }
 
+function getTotalClasses(data) {
+  let wordsArr = data
+    .replace(/\n/g, " ")
+    .replace(/\r/g, " ")
+    .split(" ");
+  let count = wordsArr.reduce(function(sum, val)  {
+    return sum + (val === angular.class || val === angular.interface)
+  }, 0);
+  return count;
+}
+
 walk(ROOT, function(err, results) {
     if (err) throw err;
     //console.log(results);
@@ -67,8 +79,11 @@ walk(ROOT, function(err, results) {
             // console.log(data);
             // console.groupEnd();
             let abstractions = getAbstractions(data);
+            let totalClasses = getTotalClasses(data);
             console.group(results[i]);
             console.log('abstractions: ' + abstractions);
+            console.log('total: ' + totalClasses);
+            console.log('abstractness: ' + abstractions/totalClasses);
             console.groupEnd();
         });  
     }
