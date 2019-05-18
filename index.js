@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const angular = {
     tsFile: /component.ts/,
+    abstraction: 'interface'
 } 
 const windowsPath = /[A-z0-9:\\-]*/;
 var paths = [];
@@ -45,12 +46,29 @@ var walk = function(ROOT, done) {
   });
 };
 
+function getInterfaces(data) {
+  let wordsArr = data
+    .replace(/\n/g, " ")
+    .replace(/\r/g, " ")
+    .split(" ");
+  let count = wordsArr.reduce(function(sum, val)  {
+    return sum + (val === angular.abstraction)
+  }, 0);
+  return count;
+}
+
 walk(ROOT, function(err, results) {
     if (err) throw err;
     //console.log(results);
     for (let i = 0; i < results.length; i++) {
         fs.readFile(results[i], 'utf-8', (err, data) => {
-            
+            // console.group(results[i])
+            // console.log(data);
+            // console.groupEnd();
+            let iOccurance = getInterfaces(data);
+            console.group(results[i]);
+            console.log('interfaces: ' + iOccurance);
+            console.groupEnd();
         });  
     }
 });
