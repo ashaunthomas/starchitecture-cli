@@ -23,13 +23,15 @@ Abstractiveness = Na / Nc
 
 🧠 = No work started yet
 
-👨‍💻 = In Progress 
+👨🏾‍💻 = In Progress 
+
+✔️ = Done Done
 
 🚢 = Shipped and available
 
 ## Status
 
-### Version 0.1 👨‍💻 
+### Version 0.1 ✔️ 
 - Angular project coverage
 - Prints component abstract analysis to console
 - Prints component stability analysis to console
