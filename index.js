@@ -12,7 +12,8 @@ const angular = {
 } 
 const windowsPath = /[A-z0-9:\\-]*/;
 
-let fanIn, fanOut = {};
+let fanIn = {};
+let fanOut = {};
 
 var walk = function(ROOT, done) {
   var results = [];
@@ -63,11 +64,12 @@ function getTotalClasses(data) {
   return count;
 }
 
-function calcFanOut(componentName, data) {
+function calculateFans(componentName, data) {
   let wordsArr = data
     .replace(/\n/g, " ")
     .replace(/\r/g, " ")
     .split(" ");
+  //console.log(wordsArr);
   let count = 0;
   for(let i = 0; i < wordsArr.length; i++) {
     if (wordsArr[i] === 'import') {
@@ -76,26 +78,38 @@ function calcFanOut(componentName, data) {
         ++searchIndex;
         ++count;
       }
+      if (wordsArr[searchIndex] === '}') {
+        let fromFile = ROOT + wordsArr[searchIndex + 2]
+          .replace(/\\/, '')
+          .replace(/\'/, '')
+          .replace(/\//, '');
+        fanIn[fromFile] += count;
+      }
     }
   }
   fanOut[componentName] = count;
 }
 
+function initFans(fileName) {
+  fanIn[fileName] = 0;
+  fanOut[fileName] = 0;
+}
+
 walk(ROOT, function(err, results) {
-    if (err) throw err;
-    for (let i = 0; i < results.length; i++) {
-        fs.readFile(results[i], 'utf-8', (err, data) => {
-            let abstractions = getAbstractions(data);
-            let totalClasses = getTotalClasses(data);
-            calcFanOut(results[i], data);
-            console.group(results[i]);
-            console.log('abstractions: ' + abstractions);
-            console.log('total: ' + totalClasses);
-            console.log('abstractness: ' + abstractions/totalClasses);
-            console.log('Fan-Out: ' + fanOut[results[i]]);
-            console.groupEnd();
-        });  
-    }
+  if (err) throw err;
+  for (let i = 0; i < results.length; i++) {
+    fs.readFile(results[i], 'utf-8', (err, data) => {
+        initFans(results[i]);
+        let abstractions = getAbstractions(data);
+        let totalClasses = getTotalClasses(data);
+        calculateFans(results[i], data);
+        console.group(results[i]);
+        console.log('abstractions: ' + abstractions);
+        console.log('total: ' + totalClasses);
+        console.log('abstractness: ' + abstractions/totalClasses);
+        console.log('fan-in: ' + fanIn[results[i]]);
+        console.log('fan-out: ' + fanOut[results[i]]);
+        console.groupEnd();
+    });  
+  }
 });
-
-
