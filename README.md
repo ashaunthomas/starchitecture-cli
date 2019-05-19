@@ -1,5 +1,5 @@
 # starchitecture-cli
-An architecture tool based on the Stable Abstractions Principle expressed in "Clean Architecture" by Robert C. Martin
+A front-end architecture tool based on the Stable Abstractions Principle expressed in "Clean Architecture" by Robert C. Martin
 
 ![Abstract/Stability Graph](https://adriancitu.files.wordpress.com/2017/12/sapprinciple1.png)
 
