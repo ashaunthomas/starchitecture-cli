@@ -34,7 +34,7 @@ Abstractiveness = Na / Nc
 ### Version 0.2 🧠
 - Add flags to denote project type
 - Add flags for output format (log | json)
-- Output single object with file name as key, attributes as value object
+- For json output format, output single object with file name as key, attributes as value object
 
 ### Version 0.1 ✔️ 
 - Angular project coverage
