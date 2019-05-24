@@ -31,7 +31,7 @@ Abstractiveness = Na / Nc
 
 ## Status
 
-### Version 0.2 🧠
+### Version 0.2 👨🏾‍💻
 - Add flags to denote project type
 - Add flags for output format (log | json)
 - For json output format, output single object with file name as key, attributes as value object
