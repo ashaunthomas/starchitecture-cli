@@ -79,10 +79,12 @@ function calculateFans(componentName, data) {
         ++count;
       }
       if (wordsArr[searchIndex] === '}') {
-        let fromFile = ROOT + wordsArr[searchIndex + 2]
-          .replace(/\\/, '')
+        let fromFile = ROOT + '/' + wordsArr[searchIndex + 2]
+          .replace(/\\/, '.ts')
           .replace(/\'/, '')
+          .replace(/./, '')
           .replace(/\//, '');
+        fromFile = fromFile.substring(0, fromFile.length - 2) + '.ts';
         fanIn[fromFile] += count;
       }
     }
@@ -93,6 +95,25 @@ function calculateFans(componentName, data) {
 function initFans(fileName) {
   fanIn[fileName] = 0;
   fanOut[fileName] = 0;
+}
+
+function calcAbstractiveness(Na, Nc) {
+  if (Nc === 0 || Na === 0) {
+    return 0;
+  }
+  else {
+    return (Na / Nc).toFixed(2);
+  }
+}
+
+function calcInstability(fanIn, fanOut) {
+  let divisor = fanIn + fanOut;
+  if (divisor === 0 || fanIn === 0) {
+    return 0;
+  }
+  else {
+    return fanOut / divisor; 
+  }
 }
 
 walk(ROOT, function(err, results) {
@@ -106,9 +127,10 @@ walk(ROOT, function(err, results) {
         console.group(results[i]);
         console.log('abstractions: ' + abstractions);
         console.log('total: ' + totalClasses);
-        console.log('abstractness: ' + abstractions/totalClasses);
+        console.log('abstractness: ' + calcAbstractiveness(abstractions, totalClasses));
         console.log('fan-in: ' + fanIn[results[i]]);
         console.log('fan-out: ' + fanOut[results[i]]);
+        console.log('instability: ' + calcInstability(fanIn[results[i]], fanOut[results[i]]));
         console.groupEnd();
     });  
   }
