@@ -1,5 +1,6 @@
 const { spawn } = require('child_process');
 const ROOT = process.argv[2];
+const OUTPUT = process.argv[3];
 const PATHGRABBER = './pathgrabber.js ';
 const fs = require('fs');
 const path = require('path');
@@ -10,6 +11,10 @@ const angular = {
     class: 'class',
     import:'import'
 } 
+const ACCEPTED_OUTPUTS = {
+  log: 'log',
+  json: 'json'
+};
 const windowsPath = /[A-z0-9:\\-]*/;
 
 let fanIn = {};
@@ -116,22 +121,45 @@ function calcInstability(fanIn, fanOut) {
   }
 }
 
-walk(ROOT, function(err, results) {
-  if (err) throw err;
-  for (let i = 0; i < results.length; i++) {
-    fs.readFile(results[i], 'utf-8', (err, data) => {
-        initFans(results[i]);
-        let abstractions = getAbstractions(data);
-        let totalClasses = getTotalClasses(data);
-        calculateFans(results[i], data);
-        console.group(results[i]);
-        console.log('abstractions: ' + abstractions);
-        console.log('total: ' + totalClasses);
-        console.log('abstractness: ' + calcAbstractiveness(abstractions, totalClasses));
-        console.log('fan-in: ' + fanIn[results[i]]);
-        console.log('fan-out: ' + fanOut[results[i]]);
-        console.log('instability: ' + calcInstability(fanIn[results[i]], fanOut[results[i]]));
-        console.groupEnd();
-    });  
+function main() {
+  switch(OUTPUT) {
+    case ACCEPTED_OUTPUTS.log:
+    case undefined:
+      runLog();
+      break;
+    case ACCEPTED_OUTPUTS.json:
+      runJson();
+      break;
+    default:
+      console.error("[!] Starchitecture ran with invalid output type: " + OUTPUT);
+      console.error("[!] Try 'json' or 'log'");     
   }
-});
+}
+
+function runLog() {
+  walk(ROOT, function(err, results) {
+    if (err) throw err;
+    for (let i = 0; i < results.length; i++) {
+      fs.readFile(results[i], 'utf-8', (err, data) => {
+          initFans(results[i]);
+          let abstractions = getAbstractions(data);
+          let totalClasses = getTotalClasses(data);
+          calculateFans(results[i], data);
+          console.group(results[i]);
+          console.log('abstractions: ' + abstractions);
+          console.log('total: ' + totalClasses);
+          console.log('abstractness: ' + calcAbstractiveness(abstractions, totalClasses));
+          console.log('fan-in: ' + fanIn[results[i]]);
+          console.log('fan-out: ' + fanOut[results[i]]);
+          console.log('instability: ' + calcInstability(fanIn[results[i]], fanOut[results[i]]));
+          console.groupEnd();
+      });  
+    }
+  });
+}
+
+function runJson() {
+  console.log('runJson ran');
+}
+
+main();
