@@ -19,6 +19,7 @@ const windowsPath = /[A-z0-9:\\-]*/;
 
 let fanIn = {};
 let fanOut = {};
+let json = {};
 
 var walk = function(ROOT, done) {
   var results = [];
@@ -159,7 +160,32 @@ function runLog() {
 }
 
 function runJson() {
-  console.log('runJson ran');
+  walk(ROOT, function(err, results) {
+    if (err) throw err;
+    for (let i = 0; i < results.length; i++) {
+      fs.readFile(results[i], 'utf-8', (err, data) => {
+        initFans(results[i]);
+        calculateFans(results[i], data);
+        let abstractions = getAbstractions(data);
+        let totalClasses = getTotalClasses(data);
+        let abstractiveness = calcAbstractiveness(abstractions, totalClasses);
+        let instability = calcInstability(fanIn[results[i]], fanOut[results[i]]);
+        // console.group(results[i]);
+        // console.log('abstractions: ' + abstractions);
+        // console.log('total: ' + totalClasses);
+        // console.log('abstractness: ' + calcAbstractiveness(abstractions, totalClasses));
+        // console.log('fan-in: ' + fanIn[results[i]]);
+        // console.log('fan-out: ' + fanOut[results[i]]);
+        // console.log('instability: ' + calcInstability(fanIn[results[i]], fanOut[results[i]]));
+        // console.groupEnd();
+        json[results[i]] = {
+          i: instability,
+          a: abstractiveness
+        };
+        console.log(json);
+      });  
+    }
+  });
 }
 
 main();
