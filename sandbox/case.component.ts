@@ -1,4 +1,5 @@
 import { CoolClass, HotClass } from './thegame.component';
+import { Unstable } from './instable.component';
 
 interface lol {
     here: 'is a test',

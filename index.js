@@ -71,6 +71,7 @@ function getTotalClasses(data) {
 }
 
 function calculateFans(componentName, data) {
+  let fromFile;
   let wordsArr = data
     .replace(/\n/g, " ")
     .replace(/\r/g, " ")
@@ -92,10 +93,18 @@ function calculateFans(componentName, data) {
           .replace(/\//, '');
         fromFile = fromFile.substring(0, fromFile.length - 2) + '.ts';
         fanIn[fromFile] += count;
+        //console.log(`fanIn[${fromFile}] = ` + count);
       }
     }
   }
+  //console.log(`fanOut[${componentName}] = ` + count);
   fanOut[componentName] = count;
+}
+
+function groupLog(title, callback) {
+  console.group(title);
+  callback();
+  console.groupEnd();
 }
 
 function initFans(fileName) {
@@ -170,21 +179,15 @@ function runJson() {
         let totalClasses = getTotalClasses(data);
         let abstractiveness = calcAbstractiveness(abstractions, totalClasses);
         let instability = calcInstability(fanIn[results[i]], fanOut[results[i]]);
-        // console.group(results[i]);
-        // console.log('abstractions: ' + abstractions);
-        // console.log('total: ' + totalClasses);
-        // console.log('abstractness: ' + calcAbstractiveness(abstractions, totalClasses));
-        // console.log('fan-in: ' + fanIn[results[i]]);
-        // console.log('fan-out: ' + fanOut[results[i]]);
-        // console.log('instability: ' + calcInstability(fanIn[results[i]], fanOut[results[i]]));
-        // console.groupEnd();
         json[results[i]] = {
           i: instability,
           a: abstractiveness
         };
-        console.log(json);
-      });  
+      }); 
     }
+    setTimeout(function() {
+      console.log(json);
+    }, 500);
   });
 }
 
