@@ -31,14 +31,15 @@ Abstractiveness = Na / Nc
 
 ## Status
 
-### Version 0.3 🧠
+### Version 0.3 👨🏾‍💻
 - Adds "report" output format, which acts like Karma's Istanbul reporter
 - Creates static Abstract/Stability graph for reporter
 - Appends corresponding component nodes on static graph for "report" output format
+- Adds parameter to denote project type
 
-### Version 0.2 👨🏾‍💻
-- Adds flags to denote project type
-- Adds flags for output format (log | json)
+### Version 0.2 ✔️
+
+- Adds parameter for output format (log | json)
 - For json output format, outputs single object with file name as key, attributes as value object
 
 ### Version 0.1 ✔️ 
